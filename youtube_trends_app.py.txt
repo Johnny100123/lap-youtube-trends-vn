@@ -1,0 +1,44 @@
+﻿import streamlit as st
+from pytrends.request import TrendReq
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+# Thiết lập trang
+st.set_page_config(page_title="YouTube Trends VN", layout="centered")
+st.title("📈 Phân Tích Xu Hướng Từ Khóa YouTube tại Việt Nam")
+
+
+# Nhập từ khóa từ người dùng
+keyword = st.text_input("Nhập từ khóa để phân tích:", "diy decor")
+
+
+if keyword:
+    # Kết nối pytrends
+    pytrends = TrendReq(hl='vi-VN', tz=420)
+    kw_list = [keyword]
+    pytrends.build_payload(kw_list, cat=0, timeframe='now 30-d', geo='VN', gprop='youtube')
+
+
+    # Lấy dữ liệu
+    data = pytrends.interest_over_time()
+
+
+    if not data.empty:
+        data = data.reset_index()
+        st.subheader(f"📊 Xu hướng tìm kiếm: {keyword}")
+        st.line_chart(data.set_index('date')[keyword])
+
+
+        # Hiển thị bảng dữ liệu
+        st.subheader("📅 Dữ liệu theo ngày")
+        st.dataframe(data[['date', keyword]])
+
+
+        # Xuất file Excel
+        excel_file = f"{keyword.replace(' ', '_')}_youtube_trends_vn.xlsx"
+        data.to_excel(excel_file, index=False)
+        with open(excel_file, "rb") as f:
+            st.download_button("📥 Tải file Excel", f, file_name=excel_file)
+    else:
+        st.warning("Không tìm thấy dữ liệu cho từ khóa này.")

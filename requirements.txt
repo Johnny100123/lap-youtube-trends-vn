@@ -1,0 +1,5 @@
+﻿streamlit
+pytrends
+pandas
+matplotlib
+openpyxl
