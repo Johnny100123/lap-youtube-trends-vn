@@ -17,7 +17,8 @@ if keyword:
     # Kết nối pytrends
     pytrends = TrendReq(hl='vi-VN', tz=420)
     kw_list = [keyword]
-    pytrends.build_payload(kw_list, cat=0, timeframe='now 30-d', geo='VN', gprop='youtube')
+    pytrends.build_payload(kw_list, cat=0, timeframe='today 1-m', geo='VN', gprop='youtube')
+
 
 
     # Lấy dữ liệu
