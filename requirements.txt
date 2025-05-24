@@ -1,4 +1,4 @@
-﻿streamlit
+streamlit>=1.30.0
 pytrends
 pandas
 matplotlib
